@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0E4D52">
+<title>คลังความรู้ ออร์โธหญิง 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@500;600;700&family=IBM+Plex+Sans+Thai+Looped:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{
+  --teal:#0E4D52; --teal-deep:#0A3A3E; --teal-soft:#DCE8E6;
+  --amber:#F2B84B; --amber-soft:#FBEBC8;
+  --cream:#F6F2EA; --surface:#FFFDF8; --ink:#1E2B2C; --muted:#5E6B6B; --line:#E2DBCC;
+  --danger:#A3322A; --danger-soft:#F7E3DF; --on-teal:#F6F2EA;
+  --head:"Anuphan","Sukhumvit Set","Thonburi",system-ui,sans-serif;
+  --body:"IBM Plex Sans Thai Looped","Sukhumvit Set","Thonburi",system-ui,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --teal:#7FC1BC; --teal-deep:#0B2E31; --teal-soft:#16373A;
+    --amber:#F2B84B; --amber-soft:#3A3020;
+    --cream:#101A1B; --surface:#172527; --ink:#ECE6D9; --muted:#9FAAA8; --line:#28393B;
+    --danger:#F08C80; --danger-soft:#3A1F1C; --on-teal:#F6F2EA;
+  }
+}
+:root[data-theme="dark"]{
+  --teal:#7FC1BC; --teal-deep:#0B2E31; --teal-soft:#16373A;
+  --amber:#F2B84B; --amber-soft:#3A3020;
+  --cream:#101A1B; --surface:#172527; --ink:#ECE6D9; --muted:#9FAAA8; --line:#28393B;
+  --danger:#F08C80; --danger-soft:#3A1F1C; --on-teal:#F6F2EA;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100%;background:var(--cream);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.65}
+button,input,select{font:inherit;color:inherit}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px;border-radius:6px}
+h1,h2,h3{font-family:var(--head);line-height:1.3;margin:0}
+
+/* app bar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--teal-deep);color:var(--on-teal);
+  padding:12px 18px 14px;display:flex;align-items:center;gap:12px}
+.bar .mark{width:34px;height:34px;border-radius:9px;background:var(--amber);color:#0A3A3E;display:grid;place-items:center;font-family:var(--head);font-weight:700;font-size:15px;flex:none}
+.bar h1{font-size:17px;font-weight:600}
+.bar small{display:block;font-size:12.5px;opacity:.75;font-family:var(--body);font-weight:400}
+.bar .back{background:none;border:0;color:var(--on-teal);padding:6px 8px 6px 0;font-size:16px;display:flex;align-items:center;gap:4px;cursor:pointer}
+
+main{max-width:640px;margin:0 auto;padding:18px 16px 110px}
+
+/* bottom nav */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface);border-top:1px solid var(--line);
+  display:flex;justify-content:space-around;padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px))}
+nav.tabs a{flex:1;text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12.5px;color:var(--muted);padding:6px 0;border-radius:10px}
+nav.tabs a svg{width:24px;height:24px}
+nav.tabs a[aria-current="page"]{color:var(--teal);font-weight:600}
+
+/* search */
+.search{position:relative;margin-bottom:22px}
+.search input{width:100%;padding:14px 16px 14px 46px;border-radius:14px;border:1.5px solid var(--line);background:var(--surface);font-size:17px}
+.search input:focus{border-color:var(--teal);outline:none}
+.search svg{position:absolute;left:15px;top:50%;transform:translateY(-50%);width:20px;height:20px;color:var(--muted)}
+.hint{font-size:14px;color:var(--muted);margin:-12px 0 20px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 13px;font-size:14.5px;cursor:pointer}
+
+/* this month */
+.now{background:var(--teal-deep);color:var(--on-teal);border-radius:18px;padding:18px 18px 16px;margin-bottom:28px;position:relative;overflow:hidden;cursor:pointer;display:block;text-decoration:none}
+.now .when{font-size:14px;opacity:.8}
+.now h2{font-size:22px;font-weight:600;margin:4px 0 12px;color:var(--on-teal)}
+.now .rounds{display:flex;gap:10px;flex-wrap:wrap}
+.now .round{background:rgba(255,255,255,.1);border-radius:10px;padding:6px 12px;font-size:14.5px}
+.now .round b{color:var(--amber);font-weight:600}
+.now .code{position:absolute;top:0;right:18px;background:var(--amber);color:#0A3A3E;font-family:var(--head);font-weight:700;font-size:13px;padding:4px 10px 5px;border-radius:0 0 8px 8px}
+
+.section-title{font-size:18px;font-weight:600;margin:0 0 10px;color:var(--teal)}
+
+/* timeline */
+ol.plan{list-style:none;margin:0;padding:0;border-left:2px solid var(--line);margin-left:30px}
+ol.plan li{position:relative;padding:0 0 0 18px;margin:0 0 4px}
+ol.plan li::before{content:"";position:absolute;left:-7px;top:18px;width:12px;height:12px;border-radius:50%;background:var(--cream);border:2px solid var(--line)}
+ol.plan li.done::before{background:var(--teal);border-color:var(--teal)}
+ol.plan li.current::before{background:var(--amber);border-color:var(--amber);box-shadow:0 0 0 4px var(--amber-soft)}
+ol.plan a{display:block;text-decoration:none;padding:10px 12px;border-radius:12px}
+ol.plan a:hover{background:var(--surface)}
+ol.plan .m{position:absolute;left:-44px;top:11px;width:32px;text-align:right;font-size:12.5px;color:var(--muted);line-height:1.2}
+ol.plan .t{font-size:16px;line-height:1.45;display:block}
+ol.plan .s{font-size:13px;color:var(--muted)}
+ol.plan li.done .s{color:var(--teal);font-weight:500}
+
+.qr-main{margin-top:26px;width:100%;padding:13px;border-radius:14px;border:1.5px dashed var(--teal);background:transparent;color:var(--teal);font-weight:600;cursor:pointer}
+
+/* card page */
+.folder{position:relative;margin-top:14px}
+.folder .tab{display:inline-block;background:var(--amber);color:#0A3A3E;font-family:var(--head);font-weight:700;font-size:14px;padding:6px 14px 8px;border-radius:10px 10px 0 0;margin-left:14px}
+.sheet{background:var(--surface);border-radius:0 18px 18px 18px;border:1px solid var(--line);padding:20px 18px 8px}
+.sheet h2{font-size:23px;font-weight:600;margin-bottom:8px}
+.meta{font-size:14.5px;color:var(--muted);margin:0 0 4px}
+.sample{background:var(--amber-soft);border-radius:10px;padding:10px 12px;font-size:14px;margin:14px 0 4px}
+.block{padding:18px 0;border-top:1px solid var(--line)}
+.block:first-of-type{border-top:0}
+.block h3{font-size:17px;font-weight:600;margin-bottom:8px;color:var(--teal)}
+.block ul{margin:0;padding-left:1.2em}
+.block li{margin:0 0 7px}
+.block li::marker{color:var(--teal)}
+.empty{color:var(--muted);font-size:15px;margin:0}
+
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--teal-soft);border-radius:12px;padding:4px;margin-bottom:12px}
+.seg button{border:0;background:transparent;padding:9px 6px;border-radius:9px;cursor:pointer;font-weight:500;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--teal);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+
+.danger{background:var(--danger-soft);border-left:5px solid var(--danger);border-radius:0 14px 14px 0;padding:14px 16px;margin:4px 0 0}
+.danger h3{color:var(--danger)}
+.danger li::marker{color:var(--danger)}
+
+.links{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{display:flex;align-items:center;justify-content:center;text-align:center;gap:6px;padding:12px 10px;border-radius:12px;font-weight:600;text-decoration:none;border:0;cursor:pointer;font-size:15.5px;line-height:1.35}
+.btn.primary{background:var(--teal);color:var(--cream)}
+.btn.ghost{background:transparent;border:1.5px solid var(--teal);color:var(--teal)}
+.btn[aria-disabled="true"]{opacity:.45;pointer-events:none}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13.5px;color:var(--muted);padding:14px 0 12px;border-top:1px solid var(--line);flex-wrap:wrap}
+.linkbtn{background:none;border:0;color:var(--teal);font-weight:600;cursor:pointer;padding:4px 0;font-size:14.5px}
+
+/* results */
+.result{display:block;text-decoration:none;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:13px 15px;margin-bottom:10px}
+.result .c{font-size:13px;color:var(--muted)}
+.result .t{font-family:var(--head);font-weight:600;font-size:17px;line-height:1.4;display:block}
+.result .x{font-size:14px;color:var(--muted);display:block;margin-top:4px}
+mark{background:var(--amber-soft);color:inherit;border-radius:3px;padding:0 2px}
+
+/* stats */
+.stat-row{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:15.5px}
+.stat-row b{font-family:var(--head);color:var(--teal)}
+.note{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-size:15px;margin:18px 0}
+
+/* bottom sheet */
+.scrim{position:fixed;inset:0;background:rgba(5,20,22,.55);z-index:50;display:none;align-items:flex-end;justify-content:center}
+.scrim.open{display:flex}
+.panel{background:var(--surface);width:100%;max-width:640px;border-radius:22px 22px 0 0;padding:22px 20px calc(20px + env(safe-area-inset-bottom,0px));max-height:90%;overflow:auto}
+.panel h2{font-size:20px;margin-bottom:6px}
+.panel p{margin:0 0 14px;color:var(--muted);font-size:15px}
+.roles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.roles button{padding:12px;border-radius:12px;border:1.5px solid var(--line);background:transparent;cursor:pointer;font-weight:500}
+.roles button[aria-pressed="true"]{border-color:var(--teal);background:var(--teal-soft);color:var(--teal);font-weight:600}
+.panel select{width:100%;padding:12px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);margin-bottom:14px}
+.qrbox{display:grid;place-items:center;padding:16px;background:#fff;border-radius:14px;margin:6px 0 12px}
+.qrbox img,.qrbox canvas{width:220px!important;height:220px!important}
+.qr-title{text-align:center;font-family:var(--head);font-weight:600;margin-bottom:4px}
+.qr-url{font-size:12.5px;color:var(--muted);word-break:break-all;text-align:center;margin-bottom:14px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+@media print{
+  body *{visibility:hidden}
+  #qrPrint,#qrPrint *{visibility:visible}
+  #qrPrint{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff;color:#000}
+  #qrPrint .qrbox img,#qrPrint .qrbox canvas{width:9cm!important;height:9cm!important}
+  #qrPrint .noprint{display:none}
+}
+@media (prefers-reduced-motion:no-preference){
+  .scrim.open .panel{animation:up .22s ease-out}
+  @keyframes up{from{transform:translateY(30px);opacity:.4}to{transform:none;opacity:1}}
+}
+
+.lead{font-family:var(--head);font-size:24px;font-weight:600;line-height:1.35;margin:4px 0 14px}
+.upd{display:flex;gap:12px;align-items:flex-start;text-decoration:none;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:13px 14px;margin-bottom:10px}
+.upd .code{flex:none;background:var(--teal-soft);color:var(--teal);font-family:var(--head);font-weight:700;font-size:12.5px;border-radius:8px;padding:3px 8px;margin-top:3px}
+.upd .t{font-family:var(--head);font-weight:600;font-size:16.5px;line-height:1.4;display:block}
+.upd .d{font-size:13.5px;color:var(--muted)}
+.new{background:var(--amber);color:#0A3A3E;font-size:12px;font-weight:600;border-radius:6px;padding:1px 7px;margin-left:6px}
+.read-mark{color:var(--teal);font-size:13px;font-weight:600;margin-left:6px}
+.all{margin-top:26px}
+.all a{display:flex;gap:10px;padding:11px 2px;border-bottom:1px solid var(--line);text-decoration:none;font-size:15.5px;line-height:1.45}
+.all a span:first-child{color:var(--muted);font-size:13px;flex:none;width:70px;padding-top:2px}
+.loading{color:var(--muted);font-size:15px;padding:30px 0;text-align:center}
+.src{font-size:12.5px;color:var(--muted);text-align:center;margin-top:24px}
+.links{grid-template-columns:1fr}
+.panel input[type=text]{width:100%;padding:12px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);margin-bottom:14px}
+.err{color:var(--danger);font-size:14px;margin:-6px 0 12px}
+
+.res{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{display:flex;flex-direction:column;gap:10px;min-height:118px;padding:14px;border-radius:16px;text-decoration:none;position:relative;border:1.5px solid transparent}
+.tile.big{grid-column:1/-1;flex-direction:row;align-items:center;min-height:0;padding:16px}
+.tile .ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;flex:none}
+.tile .ic svg{width:24px;height:24px}
+.tile .tt{font-family:var(--head);font-weight:600;font-size:16.5px;line-height:1.3;display:block}
+.tile .ts{font-size:13px;opacity:.8;display:block;margin-top:2px}
+.tile .go{position:absolute;top:12px;right:12px;width:18px;height:18px;opacity:.6}
+.tile.big .go{position:static;margin-left:auto;opacity:.8}
+.t-slides{background:var(--teal-deep);color:var(--on-teal)}
+.t-slides .ic{background:var(--amber);color:#0A3A3E}
+.t-guide{background:var(--teal-soft);color:var(--ink)}
+.t-guide .ic{background:var(--surface);color:var(--teal)}
+.t-quiz{background:var(--amber-soft);color:var(--ink)}
+.t-quiz .ic{background:var(--surface);color:#9A6A0E}
+.tile.off{background:transparent;border:1.5px dashed var(--line);color:var(--muted);pointer-events:none}
+.tile.off .ic{background:var(--cream);color:var(--muted)}
+.tile:active{transform:scale(.98)}
+/* goal & progress */
+.goal{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:22px}
+.goal .gt{font-size:14.5px;color:var(--muted)}
+.goal .gt b{color:var(--ink);font-family:var(--head)}
+.goal .gn{font-family:var(--head);font-size:20px;font-weight:600;margin:2px 0 8px}
+.track{position:relative;height:10px;border-radius:99px;background:var(--teal-soft);overflow:visible}
+.track .fill{height:100%;border-radius:99px;background:var(--teal)}
+.track .tgt{position:absolute;top:-4px;width:3px;height:18px;background:var(--amber);border-radius:2px}
+.goal .gs{font-size:13px;color:var(--muted);margin-top:8px}
+.mine{display:flex;gap:10px;margin:-8px 0 22px}
+.mine a{flex:1;text-decoration:none;background:var(--teal-soft);border-radius:12px;padding:9px 12px;font-size:14px}
+.mine b{font-family:var(--head);font-size:18px;color:var(--teal);display:block}
+.star{color:#B07A12;font-size:13px;font-weight:600;margin-left:6px}
+/* stamps */
+.stamps{display:grid;grid-template-columns:repeat(auto-fill,minmax(66px,1fr));gap:12px 8px;margin-bottom:8px}
+.stamp{display:flex;flex-direction:column;align-items:center;gap:4px;text-decoration:none;font-size:12px;color:var(--muted)}
+.stamp i{font-style:normal;width:58px;height:58px;border-radius:50%;display:grid;place-items:center;font-family:var(--head);font-weight:700;font-size:17px;border:2px dashed var(--line);color:var(--muted)}
+.stamp.read i{border:2px solid var(--teal);color:var(--teal);background:linear-gradient(90deg,var(--teal-soft) 50%,transparent 50%)}
+.stamp.pass i{border:3px double var(--amber);background:var(--teal);color:var(--amber);transform:rotate(-10deg);box-shadow:0 0 0 3px var(--teal)}
+.legend{font-size:13px;color:var(--muted);margin:4px 0 20px}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:22px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 12px}
+.kpi b{display:block;font-family:var(--head);font-size:22px;color:var(--teal);line-height:1.2}
+.kpi span{font-size:13px;color:var(--muted)}
+.badge{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.badge .bi{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:22px;background:var(--amber-soft);flex:none}
+.badge.lock{opacity:.45}
+.badge.lock .bi{filter:grayscale(1);background:var(--line)}
+.badge b{font-family:var(--head);font-weight:600;display:block;line-height:1.3}
+.badge small{color:var(--muted);font-size:13.5px}
+.rule{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:10px}
+.rule b{font-family:var(--head);color:var(--teal)}
+.rule p{margin:2px 0 0;font-size:14.5px}
+.scores td,.scores th{padding:7px 4px;border-bottom:1px solid var(--line);text-align:left;font-size:14.5px;vertical-align:top}
+.scores{width:100%;border-collapse:collapse;margin-bottom:22px}
+.scores th{color:var(--muted);font-weight:500;font-size:13px}
+/* quiz */
+.qhead{display:flex;justify-content:space-between;font-size:14px;color:var(--muted);margin-bottom:8px}
+.qbar{height:6px;border-radius:9px;background:var(--teal-soft);margin-bottom:18px}
+.qbar div{height:100%;border-radius:9px;background:var(--amber)}
+.qtext{font-family:var(--head);font-size:20px;font-weight:600;line-height:1.45;margin:0 0 16px}
+.opt{display:flex;gap:12px;width:100%;text-align:left;padding:13px 14px;margin-bottom:10px;border-radius:14px;border:1.5px solid var(--line);background:var(--surface);cursor:pointer;line-height:1.5}
+.opt .k{flex:none;width:26px;height:26px;border-radius:50%;background:var(--teal-soft);color:var(--teal);display:grid;place-items:center;font-weight:600;font-size:14px}
+.opt.ok{border-color:var(--teal);background:var(--teal-soft)}
+.opt.ok .k{background:var(--teal);color:var(--cream)}
+.opt.no{border-color:var(--danger);background:var(--danger-soft)}
+.opt.no .k{background:var(--danger);color:var(--cream)}
+.opt:disabled{cursor:default}
+.explain{background:var(--surface);border-left:4px solid var(--amber);border-radius:0 12px 12px 0;padding:10px 14px;font-size:15px;margin:6px 0 16px}
+.done{text-align:center;padding:10px 0}
+.done .big{font-family:var(--head);font-size:48px;font-weight:700;color:var(--teal);line-height:1.1}
+.done .stamp{margin:18px auto 8px}
+.done .stamp i{width:96px;height:96px;font-size:26px}
+@media (prefers-reduced-motion:no-preference){
+  .done .stamp.pass i{animation:thump .45s cubic-bezier(.3,1.6,.5,1)}
+  @keyframes thump{from{transform:scale(1.8) rotate(10deg);opacity:0}to{transform:rotate(-10deg);opacity:1}}
+}
+textarea{width:100%;min-height:120px;padding:12px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);font:inherit;margin-bottom:10px}
+.warn{font-size:13.5px;color:var(--danger);margin:0 0 14px}
+.share{margin-top:12px;width:100%}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--teal-deep);color:var(--on-teal);padding:10px 18px;border-radius:12px;z-index:60;font-size:15px}
+</style>
+</head>
+<body>
+<div id="app"><p class="loading">กำลังโหลดคลังความรู้…</p></div>
+
+<nav class="tabs" aria-label="เมนูหลัก">
+  <a href="#/" data-tab="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>หน้าหลัก</a>
+  <a href="#/search" data-tab="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>ค้นหา</a>
+  <a href="#/me" data-tab="me"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>ของฉัน</a>
+</nav>
+
+<div class="scrim" id="scrim" role="dialog" aria-modal="true"><div class="panel" id="panel"></div></div>
+
+<script>
+/* =====================================================================
+   ตั้งค่า (แก้ครั้งเดียวตอนติดตั้ง)
+   SHEET_CSV_URL : แท็บ Cards  (เผยแพร่ทางเว็บเป็น CSV)
+   QUIZ_CSV_URL  : แท็บ Quiz   (เผยแพร่ทางเว็บเป็น CSV)
+   WARD_CSV_URL  : แท็บ สรุปรายเรื่อง (รหัส, จำนวนคนอ่าน) สำหรับแถบเป้าหมายวอร์ด
+   LOG_URL       : Apps Script รับบันทึกการอ่าน ผลสอบ และเคล็ดลับ
+   ===================================================================== */
+const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSfFFdUrELl0bqOxtfIUCTW-8W6qMdfUqbWLqlMVEn-fZXTnlJId2WO_KyRe3ucWjrNDjiD0_L6O_je/pub?gid=156265126&single=true&output=csv";
+const QUIZ_CSV_URL  = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSfFFdUrELl0bqOxtfIUCTW-8W6qMdfUqbWLqlMVEn-fZXTnlJId2WO_KyRe3ucWjrNDjiD0_L6O_je/pub?gid=1284018519&single=true&output=csv";
+const WARD_CSV_URL  = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSfFFdUrELl0bqOxtfIUCTW-8W6qMdfUqbWLqlMVEn-fZXTnlJId2WO_KyRe3ucWjrNDjiD0_L6O_je/pub?gid=219645758&single=true&output=csv";
+const LOG_URL = "https://script.google.com/macros/s/AKfycbzsrlZhavokiuvb96xU4iJ5LDk3of0nfu4B98rGn3fz1LFsYxVGEJkr5uBSbXtrcC-uQA/exec";
+const SITE_URL = "https://wardorthofemale1-km.github.io/";
+const WARD_STAFF = 20;     // จำนวนบุคลากรในวอร์ด (RN 12 + PN/HP 8)
+const GOAL_PCT = 80;       // เป้าหมายร้อยละ
+const PASS_PCT = 80;       // เกณฑ์สอบผ่าน
+const ONTIME_DAYS = 7;     // อ่านภายในกี่วันหลังเผยแพร่ถือว่าตรงเวลา
+const NEW_DAYS = 14;
+const PTS = {read:1, ontime:1, pass:3}; // แต้มในแอป (เคล็ดลับที่ได้ขึ้น Card HR เพิ่ม 5 แต้มใน Sheet)
+
+/* ---------------- ข้อมูลตัวอย่าง (ใช้เมื่อยังไม่ต่อ Sheet) ---------------- */
+const SAMPLE = [
+{
+  id:"KM-70-01", title:"การจัดการความปวดหลังผ่าตัดทางออร์โธปิดิกส์", month:"ต.ค. 69",
+  teacher:"คุณประกายดาว", reviewer:"คุณจิรารัตน์", published:"2026-10-26", updated:"2026-10-26", sample:true,
+  keywords:["pain","ปวด","ความปวด","NRS","PAINAD","pain score","มอร์ฟีน","morphine","opioid","paracetamol","nerve block","sedation score","compartment","ประคบเย็น"],
+  keyPoints:[
+    "ประเมินความปวดด้วย NRS 0–10 ในผู้ที่สื่อสารได้ และใช้ PAINAD ในผู้สูงอายุที่สับสนหรือสื่อสารไม่ได้ ประเมินซ้ำหลังให้ยาทุกครั้งตามเวลาที่แนวปฏิบัติกำหนด",
+    "ใช้ยาหลายกลุ่มร่วมกัน (multimodal) ตามแผนการรักษา ลดการใช้ opioid และผลข้างเคียง",
+    "คุมปวดได้ดีทำให้ลุกเดินได้เร็ว ช่วยลดภาวะสับสนเฉียบพลัน ปอดอักเสบ และแผลกดทับ",
+    "ปวดมากผิดสัดส่วนกับแผล หรือปวดมากขึ้นเมื่อขยับนิ้ว ต้องนึกถึง compartment syndrome เสมอ",
+    "ก่อนให้ opioid ทุกครั้งประเมินระดับความง่วงและอัตราการหายใจ"],
+  rn:[
+    "ประเมิน pain score ร่วมกับสัญญาณชีพ และประเมินซ้ำหลังให้ยา บันทึกผลทุกครั้ง",
+    "ประเมิน sedation score และ RR ก่อนให้ opioid งดยาและรายงานแพทย์เมื่อเกินเกณฑ์",
+    "ให้ยาแก้ปวดก่อนทำกิจกรรมที่ปวด เช่น ลุกเดิน ทำแผล หรือทำกายภาพ",
+    "ตรวจการไหลเวียนปลายแขนขาข้างที่ผ่าตัด (สี อุณหภูมิ ชีพจร การรับความรู้สึก การขยับ)"],
+  pn:[
+    "ถามคะแนนปวดทุกครั้งที่วัดสัญญาณชีพ แจ้ง RN เมื่อปวดถึงเกณฑ์ของวอร์ด หรือปวดมากขึ้นกว่าเดิม",
+    "จัดท่าและยกขาข้างที่ผ่าตัดให้สูงตามแผนการรักษา ประคบเย็นตามคำสั่ง",
+    "สังเกตผู้ป่วยที่ได้ยาแก้ปวด ถ้าง่วงซึม ปลุกยาก หายใจช้า แจ้ง RN ทันที"],
+  danger:[
+    "ปวดรุนแรงไม่ลดลงหลังให้ยา หรือปวดมากขึ้นเมื่อเหยียดนิ้วมือนิ้วเท้า",
+    "ชา ซีด เย็น ชีพจรปลายเบาหรือคลำไม่ได้ ขยับนิ้วไม่ได้",
+    "ง่วงซึม ปลุกยาก หายใจช้ากว่าเกณฑ์ หรือ SpO₂ ลดลง",
+    "สับสนขึ้นใหม่ หรือพฤติกรรมเปลี่ยนไปจากเดิม"],
+  tips:[],
+  refs:[{label:"แนวปฏิบัติการจัดการความปวดของโรงพยาบาล (รอใส่ลิงก์)",url:""}],
+  slides:"https://example.com/slides.pdf", guideline:"https://example.com/guideline.pdf", quiz:""
+},
+{
+  id:"KM-70-02", title:"การเตรียมผ่าตัด การดูแลแผลผ่าตัด และการป้องกัน SSI", month:"พ.ย. 69",
+  teacher:"(ผู้สอนเดือน พ.ย.)", reviewer:"คุณจิรารัตน์", published:"2026-11-30", updated:"2026-11-30", sample:true,
+  keywords:["SSI","แผลผ่าตัด","แผลติดเชื้อ","wound","ทำแผล","dressing","เตรียมผ่าตัด","pre-op","NPO","งดน้ำงดอาหาร"],
+  keyPoints:["(ตัวอย่างหัวข้อ) ผู้สอนเติมประเด็นสำคัญ 3–5 ข้อ"],
+  rn:["(ตัวอย่าง) สิ่งที่ RN ต้องทำ"], pn:["(ตัวอย่าง) สิ่งที่ PN/HP ต้องทำ"],
+  danger:["(ตัวอย่าง) สัญญาณอันตรายที่ต้องรายงานทันที"],
+  tips:[], refs:[], slides:"", guideline:"", quiz:""
+}];
+const SAMPLE_QUIZ = {
+ "KM-70-01":[
+  {q:"ผู้ป่วยสูงอายุหลังผ่าตัดสะโพก สับสนและตอบคะแนนปวดเป็นตัวเลขไม่ได้ ควรประเมินความปวดด้วยวิธีใด",o:["ใช้ NRS 0–10 ต่อไป","ใช้ PAINAD สังเกตจากสีหน้า การหายใจ ท่าทาง","ถามญาติแทนแล้วบันทึกตามนั้น","งดประเมินจนกว่าจะหายสับสน"],a:1,e:"PAINAD ใช้กับผู้ที่สื่อสารไม่ได้หรือมีภาวะสับสน ประเมินจากพฤติกรรมที่สังเกตได้"},
+  {q:"ก่อนให้ยากลุ่ม opioid ทุกครั้ง ต้องประเมินอะไรเป็นสำคัญ",o:["น้ำหนักตัว","ระดับความง่วง และอัตราการหายใจ","ปริมาณปัสสาวะ","ระดับน้ำตาลในเลือด"],a:1,e:"ภาวะกดการหายใจมักเริ่มจากง่วงซึมมากขึ้นก่อน การประเมิน sedation score ร่วมกับ RR ช่วยจับได้เร็ว"},
+  {q:"ผู้ป่วยปวดขามากผิดสัดส่วนกับแผล และปวดมากขึ้นเมื่อเหยียดนิ้วเท้า ต้องนึกถึงภาวะใดก่อน",o:["ปวดแผลตามปกติ","Compartment syndrome","ท้องผูกจากยา","แผลติดเชื้อ"],a:1,e:"ปวดเมื่อยืดกล้ามเนื้อแบบ passive เป็นอาการเริ่มต้นสำคัญของ compartment syndrome ต้องรายงานแพทย์ทันที"},
+  {q:"PN/HP พบผู้ป่วยหลังได้ยาแก้ปวด ปลุกยากและหายใจช้า ควรทำอย่างไร",o:["ปล่อยให้นอนพักต่อ","แจ้ง RN ทันที","รอวัดสัญญาณชีพรอบถัดไป","ให้ญาติคอยดูแทน"],a:1,e:"เป็นสัญญาณอันตรายที่ต้องรายงาน RN ทันที ไม่รอรอบถัดไป"},
+  {q:"ควรให้ยาแก้ปวดช่วงใด เพื่อให้ผู้ป่วยลุกเดินได้ดีที่สุด",o:["หลังลุกเดินเสร็จ","ก่อนลุกเดิน โดยเผื่อเวลาให้ยาออกฤทธิ์","เฉพาะเมื่อผู้ป่วยร้องขอ","ให้เฉพาะตอนกลางคืน"],a:1,e:"ให้ยาก่อนกิจกรรมที่ทำให้ปวด ตามเวลาออกฤทธิ์ของยาแต่ละชนิด ช่วยให้ลุกเดินได้เร็วและปลอดภัย"}
+ ]};
+const SAMPLE_WARD = {"KM-70-01":14,"KM-70-02":6};
+
+/* ============================ ส่วนระบบ ============================ */
+const TH_M=["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const store={
+  get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+};
+let CARDS=[], QUIZ={}, WARD={}, SOURCE="sample";
+
+function toDate(v){
+  if(!v) return null; v=String(v).trim();
+  let m=v.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if(m) return new Date(+m[1]>2400?m[1]-543:+m[1],m[2]-1,+m[3]);
+  m=v.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})/);
+  if(m){let y=+m[3];if(y<100)y+=y>50?1957:2000;if(y>2400)y-=543;return new Date(y,m[2]-1,+m[1])}
+  const d=new Date(v);return isNaN(d)?null:d;
+}
+const thDate=d=>d?d.getDate()+" "+TH_M[d.getMonth()]+" "+String(d.getFullYear()+543).slice(-2):"-";
+const isNew=d=>d&&(Date.now()-d.getTime())/864e5<=NEW_DAYS;
+const short=id=>String(id).replace(/^KM-\d+-/,"");
+
+/* ---- CSV ---- */
+function parseCSV(t){
+  const rows=[];let row=[],f="",q=false;
+  for(let i=0;i<t.length;i++){const c=t[i];
+    if(q){if(c=='"'){if(t[i+1]=='"'){f+='"';i++}else q=false}else f+=c}
+    else if(c=='"')q=true;else if(c==","){row.push(f);f=""}
+    else if(c=="\n"||c=="\r"){if(c=="\r"&&t[i+1]=="\n")i++;row.push(f);rows.push(row);row=[];f=""}
+    else f+=c}
+  if(f||row.length){row.push(f);rows.push(row)}
+  return rows;
+}
+function objects(rows,map){const h=rows[0].map(x=>map[x.trim()]||x.trim());return rows.slice(1).map(r=>{const o={};h.forEach((k,i)=>o[k]=(r[i]||"").trim());return o})}
+const COLS={"รหัส":"id","ชื่อเรื่อง":"title","เดือนที่สอน":"month","ผู้สอน":"teacher","ผู้ตรวจทาน":"reviewer",
+  "ประเด็นสำคัญ":"keyPoints","RN ต้องทำ":"rn","PN/HP ต้องทำ":"pn","สัญญาณอันตราย":"danger",
+  "เคล็ดลับจากหน้างาน":"tips","เอกสารอ้างอิง":"refs","ลิงก์สไลด์":"slides","ลิงก์แนวปฏิบัติ":"guideline",
+  "ลิงก์แบบทดสอบ":"quiz","คำค้น":"keywords","วันที่เผยแพร่":"published","วันที่ปรับปรุง":"updated","สถานะ":"status"};
+const QCOLS={"รหัสเรื่อง":"id","คำถาม":"q","ก":"o1","ข":"o2","ค":"o3","ง":"o4","เฉลย":"a","คำอธิบาย":"e"};
+const lines=v=>String(v||"").split(/\n/).map(s=>s.replace(/^\s*([-•*]|\d+[.)])\s*/,"").trim()).filter(Boolean);
+function toCards(rows){
+  return objects(rows,COLS).filter(o=>o.id&&o.title&&(o.status||"").includes("เผยแพร่"))
+   .map(o=>({...o,keyPoints:lines(o.keyPoints),rn:lines(o.rn),pn:lines(o.pn),danger:lines(o.danger),tips:lines(o.tips),
+     keywords:String(o.keywords||"").split(/[,\n]/).map(s=>s.trim()).filter(Boolean),
+     refs:lines(o.refs).map(l=>{const u=(l.match(/https?:\/\/\S+/)||[""])[0];return{label:l.replace(u,"").replace(/[|:\s]+$/,"").trim()||u,url:u}})}));
+}
+function toQuiz(rows){
+  const out={},letters=["ก","ข","ค","ง"];
+  objects(rows,QCOLS).filter(o=>o.id&&o.q).forEach(o=>{
+    const opts=[o.o1,o.o2,o.o3,o.o4].filter(Boolean);
+    let a=letters.indexOf((o.a||"").trim());if(a<0)a=(parseInt(o.a)||1)-1;
+    (out[o.id]=out[o.id]||[]).push({q:o.q,o:opts,a,e:o.e});
+  });return out;
+}
+function toWard(rows){const o={};rows.slice(1).forEach(r=>{if(r[0])o[r[0].trim()]=parseInt(r[1])||0});return o}
+async function getCSV(url){const r=await fetch(url,{cache:"no-store"});if(!r.ok)throw 0;return parseCSV(await r.text())}
+async function load(){
+  if(SHEET_CSV_URL){
+    try{CARDS=toCards(await getCSV(SHEET_CSV_URL));SOURCE="sheet";store.set("km-cache",CARDS)}
+    catch(e){const c=store.get("km-cache",null);if(c){CARDS=c;SOURCE="cache"}else{CARDS=SAMPLE;SOURCE="sample"}}
+    try{QUIZ=QUIZ_CSV_URL?toQuiz(await getCSV(QUIZ_CSV_URL)):{};store.set("km-qcache",QUIZ)}catch(e){QUIZ=store.get("km-qcache",{})}
+    try{WARD=WARD_CSV_URL?toWard(await getCSV(WARD_CSV_URL)):{}}catch(e){WARD={}}
+  } else {CARDS=SAMPLE;QUIZ=SAMPLE_QUIZ;WARD=SAMPLE_WARD;SOURCE="sample"}
+  CARDS.forEach(c=>{c._d=toDate(c.updated);c._p=toDate(c.published)||c._d});
+  CARDS.sort((a,b)=>(b._d||0)-(a._d||0));
+}
+
+/* ---- ข้อมูลของผู้ใช้ (เก็บในเครื่อง + ส่งเข้า Log) ---- */
+const me=()=>store.get("km-user",null);
+function reads(){let r=store.get("km-read",{});if(Array.isArray(r)){const o={};r.forEach(id=>o[id]=Date.now());r=o;store.set("km-read",r)}return r}
+const quizRec=()=>store.get("km-quiz",{});
+const tipsSent=()=>store.get("km-tips",[]);
+function send(type,data){
+  const u=me()||{};
+  if(LOG_URL){try{navigator.sendBeacon(LOG_URL,JSON.stringify({type,code:u.code,role:u.role,ward:u.ward||"",time:new Date().toISOString(),...data}))}catch(e){}}
+}
+function logView(c){
+  const r=reads();
+  if(!r[c.id]){r[c.id]=Date.now();store.set("km-read",r)}
+  send("view",{id:c.id});
+}
+function stats(){
+  const r=reads(),qz=quizRec(),ids=CARDS.map(c=>c.id);
+  const read=ids.filter(id=>r[id]),passed=ids.filter(id=>qz[id]&&qz[id].passed);
+  const ontime=CARDS.filter(c=>r[c.id]&&c._p&&(r[c.id]-c._p.getTime())/864e5<=ONTIME_DAYS);
+  const withQuiz=CARDS.filter(c=>QUIZ[c.id]&&QUIZ[c.id].length);
+  const points=read.length*PTS.read+ontime.length*PTS.ontime+passed.length*PTS.pass;
+  return {read,passed,ontime,withQuiz,points,tips:tipsSent().length,total:ids.length};
+}
+function toast(t){const d=document.createElement("div");d.className="toast";d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2200)}
+
+/* ---------- ส่วนประกอบหน้า ---------- */
+function bar(title,sub,back){
+  return `<header class="bar">${back?`<button class="back" onclick="history.length>1?history.back():location.hash='#/'" aria-label="ย้อนกลับ"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg></button>`:`<div class="mark">F1</div>`}
+  <div><h1>${esc(title)}</h1>${sub?`<small>${esc(sub)}</small>`:""}</div></header>`;
+}
+function searchBox(q=""){
+  return `<div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+  <input id="q" type="search" placeholder="ค้นหา เช่น ปวด, SSI, แผลกดทับ" value="${esc(q)}" autocomplete="off" aria-label="ค้นหาความรู้"></div>`;
+}
+function srcNote(){
+  return SOURCE==="sample"?`<p class="src">ใช้ข้อมูลตัวอย่าง ยังไม่ได้ต่อ Google Sheet</p>`:
+         SOURCE==="cache"?`<p class="src">ออฟไลน์อยู่ แสดงข้อมูลที่โหลดไว้ครั้งล่าสุด</p>`:"";
+}
+function goalBlock(c){
+  if(!c||WARD[c.id]==null) return "";
+  const n=WARD[c.id],pct=Math.min(100,n/WARD_STAFF*100),need=Math.ceil(WARD_STAFF*GOAL_PCT/100);
+  return `<div class="goal"><div class="gt">เป้าหมายวอร์ด · <b>${esc(c.id)}</b> ${esc(c.title)}</div>
+    <div class="gn">อ่านแล้ว ${n} จาก ${WARD_STAFF} คน</div>
+    <div class="track"><div class="fill" style="width:${pct}%"></div><div class="tgt" style="left:${GOAL_PCT}%"></div></div>
+    <div class="gs">${n>=need?"ถึงเป้าแล้ว เยี่ยมมาก":`อีก ${need-n} คนถึงเป้า ${GOAL_PCT}%`}${SOURCE==="sample"?" (ตัวเลขตัวอย่าง)":""}</div></div>`;
+}
+function stampHTML(c,cls,big){
+  const r=reads(),q=quizRec()[c.id];
+  const st=q&&q.passed?"pass":r[c.id]?"read":"";
+  return `<a class="stamp ${st}" href="#/card/${esc(c.id)}" aria-label="${esc(c.id)} ${st==="pass"?"สอบผ่าน":st==="read"?"อ่านแล้ว":"ยังไม่อ่าน"}"><i>${st==="pass"?"★":esc(short(c.id))}</i>${big?"":`<span>${esc(short(c.id))}</span>`}</a>`;
+}
+
+/* ---------- หน้าหลัก ---------- */
+function viewHome(){
+  const u=me(),r=reads(),qz=quizRec(),s=stats();
+  const latest=CARDS.slice(0,5).map(c=>`<a class="upd" href="#/card/${esc(c.id)}"><span class="code">${esc(short(c.id))}</span>
+     <span><span class="t">${esc(c.title)}</span><span class="d">ปรับปรุง ${thDate(c._d)}${isNew(c._d)?'<span class="new">ใหม่</span>':""}${qz[c.id]&&qz[c.id].passed?'<span class="star">★ สอบผ่าน</span>':r[c.id]?'<span class="read-mark">✓ อ่านแล้ว</span>':""}</span></span></a>`).join("");
+  const all=[...CARDS].sort((a,b)=>a.id.localeCompare(b.id)).map(c=>`<a href="#/card/${esc(c.id)}"><span>${esc(c.id)}</span><span>${esc(c.title)}</span></a>`).join("");
+  const newest=[...CARDS].sort((a,b)=>(b._p||0)-(a._p||0))[0];
+  return bar("คลังความรู้ ออร์โธหญิง 1",u?`สวัสดี ${u.code}${u.ward?" · "+u.ward:""}`:"")+
+  `<main><p class="lead">อยากรู้เรื่องอะไร ค้นได้เลย</p>${searchBox()}
+    <div class="mine"><a href="#/me"><b>${s.read.length}/${s.total}</b>เรื่องที่อ่าน</a><a href="#/me"><b>${s.passed.length}/${s.withQuiz.length}</b>สอบผ่าน</a><a href="#/me"><b>${s.points}</b>แต้ม</a></div>
+    ${goalBlock(newest)}
+    <h2 class="section-title">อัปเดตล่าสุด</h2>
+    ${latest||`<p class="empty">ยังไม่มีเรื่องที่เผยแพร่</p>`}
+    ${CARDS.length>5?`<div class="all"><h2 class="section-title">ทั้งหมดในคลัง (${CARDS.length} เรื่อง)</h2>${all}</div>`:""}
+    <button class="qr-main" onclick="openQR('','QR หน้าหลัก สำหรับติดเคาน์เตอร์พยาบาล')">QR หน้าหลัก สำหรับติดเคาน์เตอร์</button>
+    ${srcNote()}
+  </main>`;
+}
+
+/* ---------- หน้าเนื้อหา ---------- */
+const ICON={
+ slides:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M12 16v4M8 20h8M10 8l4 2-4 2z"/></svg>',
+ guide:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 12h7M9 16h7"/></svg>',
+ quiz:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="m8 9 1.5 1.5L12 8M8 15l1.5 1.5L12 14M14 9h3M14 15h3"/></svg>',
+ go:'<svg class="go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg>'};
+function linkKind(u){
+  if(/docs\.google\.com\/presentation/.test(u)) return "Google Slides";
+  if(/docs\.google\.com\/document/.test(u)) return "Google Docs";
+  if(/forms\.gle|docs\.google\.com\/forms/.test(u)) return "Google Form";
+  if(/drive\.google\.com/.test(u)) return "Google Drive";
+  if(/canva\./.test(u)) return "Canva";
+  if(/youtu/.test(u)) return "วิดีโอ";
+  if(/\.pdf(\?|#|$)/i.test(u)) return "ไฟล์ PDF";
+  return "เปิดลิงก์";
+}
+function tile(url,cls,icon,title,big,sub,internal){
+  if(!url) return `<div class="tile ${cls} off${big?" big":""}"><span class="ic">${ICON[icon]}</span><span><span class="tt">${title}</span><span class="ts">ยังไม่ได้ใส่ลิงก์</span></span></div>`;
+  return `<a class="tile ${cls}${big?" big":""}" href="${esc(url)}" ${internal?"":'target="_blank" rel="noopener"'}><span class="ic">${ICON[icon]}</span><span><span class="tt">${title}</span><span class="ts">${sub||linkKind(url)}</span></span>${internal?"":ICON.go}</a>`;
+}
+function quizTile(c){
+  const qs=QUIZ[c.id];
+  if(qs&&qs.length){const r=quizRec()[c.id];
+    const sub=r?(r.passed?`★ ผ่านแล้ว ${r.best}/${qs.length}`:`ล่าสุด ${r.last}/${qs.length} ลองอีกครั้ง`):`${qs.length} ข้อ ทำในแอป`;
+    return tile("#/quiz/"+c.id,"t-quiz","quiz","แบบทดสอบ",false,sub,true)}
+  return c.quiz?tile(c.quiz,"t-quiz","quiz","แบบทดสอบ"):"";
+}
+function list(arr){return arr&&arr.length?`<ul>${arr.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:""}
+function viewCard(id){
+  const c=CARDS.find(k=>k.id===id);
+  if(!c) return bar("ไม่พบเรื่องนี้","",true)+`<main><p class="empty">ยังไม่มีรหัส ${esc(id)} ในคลังความรู้ หรือยังไม่เผยแพร่ กลับไปที่หน้าหลักเพื่อดูเรื่องที่มี</p></main>`;
+  logView(c);
+  const u=me()||{},side=(u.role==="PN"||u.role==="HP")?"pn":"rn";
+  return bar(c.id,c.month?`สอน ${c.month}`:"",true)+`<main><div class="folder"><span class="tab">${esc(c.id)}</span><div class="sheet">
+    <h2>${esc(c.title)}</h2>
+    <p class="meta">ผู้สอน ${esc(c.teacher||"-")} · ผู้ตรวจทาน ${esc(c.reviewer||"-")}</p>
+    ${c.sample?`<div class="sample">ข้อมูลตัวอย่างสำหรับทดลองหน้าตา ผู้สอนต้องตรวจทานและแทนที่ก่อนใช้จริง</div>`:""}
+    <div class="block"><h3>ประเด็นสำคัญที่ต้องรู้</h3>${list(c.keyPoints)}</div>
+    <div class="block"><div class="seg" role="group" aria-label="เลือกบทบาท">
+        <button aria-pressed="${side==="rn"}" onclick="flip('rn')">RN ต้องทำ</button>
+        <button aria-pressed="${side==="pn"}" onclick="flip('pn')">PN/HP ต้องทำ</button></div>
+      <div id="side-rn" ${side==="rn"?"":"hidden"}>${list(c.rn)||'<p class="empty">ยังไม่มีข้อมูล</p>'}</div>
+      <div id="side-pn" ${side==="pn"?"":"hidden"}>${list(c.pn)||'<p class="empty">ยังไม่มีข้อมูล</p>'}</div></div>
+    ${c.danger&&c.danger.length?`<div class="block"><div class="danger"><h3>สัญญาณอันตราย รายงานทันที</h3>${list(c.danger)}</div></div>`:""}
+    <div class="block"><h3>เคล็ดลับจากหน้างาน / บทเรียนจากเหตุการณ์จริง</h3>${c.tips&&c.tips.length?list(c.tips):`<p class="empty">ยังไม่มี เป็นคนแรกที่แชร์ได้เลย</p>`}
+      <button class="btn ghost share" onclick="openTip('${esc(c.id)}')">แชร์เคล็ดลับเรื่องนี้</button></div>
+    <div class="block"><h3>สื่อการสอนและแนวปฏิบัติ</h3><div class="res">
+      ${tile(c.slides,"t-slides","slides","สไลด์ที่สอน",true)}${tile(c.guideline,"t-guide","guide","แนวปฏิบัติที่เกี่ยวข้อง")}${quizTile(c)}</div></div>
+    ${c.refs&&c.refs.length?`<div class="block"><h3>เอกสารอ้างอิง</h3><ul>${c.refs.map(r=>`<li>${r.url?`<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.label)}</a>`:esc(r.label)}</li>`).join("")}</ul></div>`:""}
+    <div class="foot"><span>ปรับปรุงล่าสุด ${thDate(c._d)}</span>
+      <button class="linkbtn" onclick="openQR('${esc(c.id)}','${esc(c.id)}')">QR ของเรื่องนี้</button></div>
+  </div></div></main>`;
+}
+function flip(s){
+  document.querySelectorAll(".seg button").forEach((b,i)=>b.setAttribute("aria-pressed",(i===0)===(s==="rn")));
+  $("#side-rn").hidden=s!=="rn";$("#side-pn").hidden=s!=="pn";
+}
+
+/* ---------- แบบทดสอบในแอป ---------- */
+let QZ=null;
+function viewQuiz(id){
+  const c=CARDS.find(k=>k.id===id),qs=QUIZ[id];
+  if(!c||!qs||!qs.length) return bar("แบบทดสอบ","",true)+`<main><p class="empty">เรื่องนี้ยังไม่มีแบบทดสอบในแอป</p></main>`;
+  if(!QZ||QZ.id!==id) QZ={id,i:0,score:0,picked:null,done:false};
+  const head=bar("แบบทดสอบ "+id,c.title,true);
+  if(QZ.done){
+    const n=qs.length,pass=QZ.score/n*100>=PASS_PCT;
+    return head+`<main><div class="done">
+      <div class="stamp ${pass?"pass":"read"}" style="display:inline-flex"><i>${pass?"★":esc(short(id))}</i></div>
+      <div class="big">${QZ.score}/${n}</div>
+      <p>${pass?"สอบผ่าน ได้ตราเต็มดวงแล้ว":`ยังไม่ถึงเกณฑ์ ${PASS_PCT}% ลองทบทวนแล้วทำใหม่ได้`}</p></div>
+      <div class="row2"><button class="btn ghost" onclick="restartQuiz()">ทำอีกครั้ง</button><a class="btn primary" href="#/card/${esc(id)}">กลับไปที่เนื้อหา</a></div>
+      <a class="btn ghost" style="margin-top:10px" href="#/me">ดูสมุดสะสมตรา</a></main>`;
+  }
+  const q=qs[QZ.i],L=["ก","ข","ค","ง"];
+  const opts=q.o.map((t,k)=>{let cls="";if(QZ.picked!=null){if(k===q.a)cls="ok";else if(k===QZ.picked)cls="no"}
+    return `<button class="opt ${cls}" ${QZ.picked!=null?"disabled":""} onclick="pick(${k})"><span class="k">${L[k]}</span><span>${esc(t)}</span></button>`}).join("");
+  return head+`<main>${c.sample?`<div class="sample" style="margin:0 0 14px">ข้อสอบตัวอย่าง ผู้สอนต้องตรวจทานก่อนใช้จริง</div>`:""}
+    <div class="qhead"><span>ข้อ ${QZ.i+1} จาก ${qs.length}</span><span>ถูก ${QZ.score}</span></div>
+    <div class="qbar"><div style="width:${QZ.i/qs.length*100}%"></div></div>
+    <p class="qtext">${esc(q.q)}</p>${opts}
+    ${QZ.picked!=null?`${q.e?`<div class="explain">${QZ.picked===q.a?"ถูกต้อง ":"เฉลย: "+L[q.a]+" "}${esc(q.e)}</div>`:""}
+      <button class="btn primary" style="width:100%" onclick="nextQ()">${QZ.i+1<qs.length?"ข้อถัดไป":"ดูผล"}</button>`:""}</main>`;
+}
+function pick(k){const q=QUIZ[QZ.id][QZ.i];QZ.picked=k;if(k===q.a)QZ.score++;render(false)}
+function nextQ(){const qs=QUIZ[QZ.id];QZ.i++;QZ.picked=null;
+  if(QZ.i>=qs.length){QZ.done=true;const rec=quizRec(),n=qs.length,prev=rec[QZ.id]||{best:0,attempts:0,passed:false};
+    const passed=QZ.score/n*100>=PASS_PCT;
+    rec[QZ.id]={best:Math.max(prev.best,QZ.score),last:QZ.score,n,attempts:prev.attempts+1,passed:prev.passed||passed,time:Date.now()};
+    store.set("km-quiz",rec);send("quiz",{id:QZ.id,score:QZ.score,total:n,passed});
+    const r=reads();if(!r[QZ.id]){r[QZ.id]=Date.now();store.set("km-read",r)}}
+  render(true)}
+function restartQuiz(){QZ={id:QZ.id,i:0,score:0,picked:null,done:false};render(true)}
+
+/* ---------- ค้นหา ---------- */
+function haystack(c){return [c.id,c.title,c.month,...(c.keywords||[]),...(c.keyPoints||[]),...(c.rn||[]),...(c.pn||[]),...(c.danger||[]),...(c.tips||[])].join(" ").toLowerCase()}
+function hl(t,q){if(!q)return esc(t);const i=t.toLowerCase().indexOf(q);return i<0?esc(t):esc(t.slice(0,i))+"<mark>"+esc(t.slice(i,i+q.length))+"</mark>"+esc(t.slice(i+q.length))}
+function results(q){
+  q=q.trim().toLowerCase();
+  if(!q){const kw=[...new Set(CARDS.flatMap(c=>(c.keywords||[]).slice(0,2)))].slice(0,10);
+    return kw.length?`<div class="chips">${kw.map(w=>`<button class="chip" onclick="setQ(this.textContent)">${esc(w)}</button>`).join("")}</div>`:""}
+  const hits=CARDS.filter(c=>haystack(c).includes(q));
+  if(!hits.length) return `<p class="empty">ไม่พบ "${esc(q)}" ลองคำที่สั้นลง หรือคำภาษาอังกฤษที่ใช้ในวอร์ด</p>`;
+  return hits.map(c=>{const kw=(c.keywords||[]).find(k=>k.toLowerCase().includes(q));
+    return `<a class="result" href="#/card/${esc(c.id)}"><span class="c">${esc(c.id)} · ปรับปรุง ${thDate(c._d)}</span>
+    <span class="t">${hl(c.title,q)}</span>${kw&&!c.title.toLowerCase().includes(q)?`<span class="x">คำสำคัญ: ${hl(kw,q)}</span>`:""}</a>`}).join("");
+}
+function viewSearch(){return bar("ค้นหาความรู้","ภาษาไทย หรือศัพท์ที่ใช้ในวอร์ด")+`<main>${searchBox()}<div id="res">${results("")}</div></main>`}
+function setQ(w){const i=$("#q");i.value=w;$("#res").innerHTML=results(w);i.focus()}
+
+/* ---------- ของฉัน ---------- */
+function viewMe(){
+  const u=me()||{},s=stats(),qz=quizRec(),r=reads();
+  const ordered=[...CARDS].sort((a,b)=>a.id.localeCompare(b.id));
+  const badges=[
+    ["🌱","ก้าวแรก","อ่าน Knowledge Card เรื่องแรก",s.read.length>=1],
+    ["⏱️","ตรงเวลา",`อ่านภายใน ${ONTIME_DAYS} วันหลังเผยแพร่ 3 เรื่อง (${Math.min(s.ontime.length,3)}/3)`,s.ontime.length>=3],
+    ["⭐","นักสะสมตรา","สอบผ่าน 3 เรื่อง ("+Math.min(s.passed.length,3)+"/3)",s.passed.length>=3],
+    ["💬","ผู้แบ่งปัน","แชร์เคล็ดลับจากหน้างานครั้งแรก",s.tips>=1],
+    ["🏅","ครบทุกเรื่อง",`อ่านและสอบผ่านครบทุกเรื่องที่มีแบบทดสอบ (${s.passed.length}/${s.withQuiz.length})`,s.withQuiz.length>0&&s.passed.length>=s.withQuiz.length&&s.read.length>=s.total]
+  ].map(([i,t,d,ok])=>`<div class="badge ${ok?"":"lock"}"><span class="bi">${i}</span><span><b>${t}</b><small>${d}</small></span></div>`).join("");
+  const scoreRows=ordered.filter(c=>qz[c.id]).map(c=>{const q=qz[c.id];
+    return `<tr><td>${esc(c.id)}</td><td>${q.best}/${q.n}</td><td>${q.attempts} ครั้ง</td><td>${q.passed?"★ ผ่าน":"ยังไม่ผ่าน"}</td></tr>`}).join("");
+  return bar("ของฉัน",u.code?`${u.code}${u.ward?" · "+u.ward:""}`:"")+`<main>
+    <div class="kpis"><div class="kpi"><b>${s.read.length}/${s.total}</b><span>อ่านแล้ว</span></div>
+      <div class="kpi"><b>${s.passed.length}/${s.withQuiz.length}</b><span>สอบผ่าน</span></div>
+      <div class="kpi"><b>${s.points}</b><span>แต้มในแอป</span></div></div>
+
+    <h2 class="section-title">สมุดสะสมตรา</h2>
+    <div class="stamps">${ordered.map(c=>stampHTML(c)).join("")}</div>
+    <p class="legend">ครึ่งดวง = อ่านแล้ว · ตราดาว = สอบผ่าน ≥ ${PASS_PCT}% · กดที่ตราเพื่อเปิดเรื่อง</p>
+
+    <h2 class="section-title">ผลทดสอบ</h2>
+    ${scoreRows?`<table class="scores"><thead><tr><th>เรื่อง</th><th>คะแนนดีสุด</th><th>ทำ</th><th>ผล</th></tr></thead><tbody>${scoreRows}</tbody></table>`:`<p class="empty" style="margin-bottom:22px">ยังไม่ได้ทำแบบทดสอบ เปิดเรื่องที่อ่านแล้วกดบล็อก "แบบทดสอบ"</p>`}
+
+    <h2 class="section-title">เหรียญความสำเร็จ</h2>
+    <div style="margin-bottom:24px">${badges}</div>
+
+    <h2 class="section-title">รางวัลครึ่งปี (มี.ค. 70) และสิ้นปี (ก.ย. 70)</h2>
+    <div class="rule"><b>ขยันเรียนรู้</b><p>แต้มสูงสุด แยก RN และ PN/HP · อ่าน ${PTS.read} แต้ม อ่านตรงเวลา +${PTS.ontime} สอบผ่าน +${PTS.pass} เคล็ดลับได้ขึ้น Card +5 (HR เพิ่มให้)</p></div>
+    <div class="rule"><b>ผู้แบ่งปันความรู้</b><p>เคล็ดลับจากหน้างานได้ขึ้น Knowledge Card มากที่สุด · คุณแชร์ไปแล้ว ${s.tips} ครั้ง</p></div>
+    <div class="rule"><b>ครบทุกเรื่อง</b><p>อ่านและสอบผ่านครบทุกเรื่อง ได้เกียรติบัตรทุกคน ไม่จำกัดจำนวน</p></div>
+    <p class="legend">แต้มในแอปนับจากเครื่องนี้ ผลรางวัลใช้ข้อมูลรวมที่ HR สรุปจาก Sheet</p>
+
+    <button class="btn ghost" style="width:100%" onclick="askUser(true)">เปลี่ยนรหัสผู้ใช้</button>
+  </main>`;
+}
+
+/* ---------- bottom sheets ---------- */
+function openSheet(html){$("#panel").innerHTML=html;$("#scrim").classList.add("open")}
+function closeSheet(){$("#scrim").classList.remove("open")}
+$("#scrim").addEventListener("click",e=>{if(e.target.id==="scrim"&&me())closeSheet()});
+function openTip(id){
+  openSheet(`<h2>แชร์เคล็ดลับ ${esc(id)}</h2>
+    <p>วิธีที่ได้ผลจากหน้างาน หรือบทเรียนจากเหตุการณ์จริง HR จะคัดเลือกขึ้น Knowledge Card พร้อมเครดิตรหัสของคุณ</p>
+    <textarea id="tipText" placeholder="เช่น ถามคะแนนปวดตอนวัด V/S ไปพร้อมกัน ไม่ต้องเดินมาถามอีกรอบ"></textarea>
+    <p class="warn">ห้ามใส่ชื่อ HN หรือข้อมูลที่ระบุตัวผู้ป่วย</p>
+    <div class="row2"><button class="btn ghost" onclick="closeSheet()">ยกเลิก</button><button class="btn primary" onclick="sendTip('${esc(id)}')">ส่งเคล็ดลับ</button></div>`);
+  setTimeout(()=>$("#tipText").focus(),50);
+}
+function sendTip(id){
+  const t=$("#tipText").value.trim();if(!t){$("#tipText").focus();return}
+  const a=tipsSent();a.push({id,t:Date.now()});store.set("km-tips",a);
+  send("tip",{id,text:t});closeSheet();toast(LOG_URL?"ส่งเคล็ดลับแล้ว ขอบคุณค่ะ":"บันทึกแล้ว (โหมดตัวอย่าง ยังไม่ส่งถึง HR)");render(false);
+}
+let pickRole=null;
+function askUser(force){
+  if(!force&&me())return;
+  pickRole=(me()||{}).role||null;
+  const opts=[["RN","RN"],["PN","PN"],["HP","HP"],["OTHER","หอผู้ป่วยอื่น"]];
+  openSheet(`<h2>ลงชื่อเข้าใช้ด้วยรหัส</h2>
+    <p>เลือกครั้งเดียวต่อเครื่อง ใช้บันทึกว่าใครเข้ามาเรียนเรื่องไหน และสะสมแต้มรางวัล</p>
+    <div class="roles">${opts.map(([v,l])=>`<button aria-pressed="${pickRole===v}" data-v="${v}" onclick="chooseRole('${v}')">${l}</button>`).join("")}</div>
+    <div id="codeWrap"></div><div id="err"></div>
+    <button class="btn primary" style="width:100%" onclick="saveUser()">เข้าใช้งาน</button>
+    ${force?`<button class="btn ghost" style="width:100%;margin-top:10px" onclick="closeSheet()">ยกเลิก</button>`:""}`);
+  renderCode();
+}
+function chooseRole(v){pickRole=v;document.querySelectorAll(".roles button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.v===v));$("#err").innerHTML="";renderCode()}
+function renderCode(){
+  const w=$("#codeWrap");if(!w)return;const u=me()||{};
+  if(pickRole==="OTHER"){w.innerHTML=`<input type="text" id="ward" placeholder="ชื่อหอผู้ป่วย เช่น ออร์โธชาย 2" value="${esc(u.ward||"")}" aria-label="ชื่อหอผู้ป่วย">`;return}
+  const n=pickRole==="RN"?12:(pickRole==="PN"||pickRole==="HP")?8:0,pre=pickRole==="RN"?"RN":"PN/HP";
+  w.innerHTML=n?`<select id="code" aria-label="รหัสบุคลากร">${Array.from({length:n},(_,i)=>`<option>${pre}${String(i+1).padStart(2,"0")}</option>`).join("")}</select>`:"";
+  if(u.code&&$("#code"))$("#code").value=u.code;
+}
+function saveUser(){
+  if(!pickRole){$("#err").innerHTML='<p class="err">เลือกตำแหน่งก่อน</p>';return}
+  let u;
+  if(pickRole==="OTHER"){const w=$("#ward").value.trim();if(!w){$("#err").innerHTML='<p class="err">ใส่ชื่อหอผู้ป่วย</p>';return}u={role:"OTHER",code:"หอผู้ป่วยอื่น",ward:w}}
+  else u={role:pickRole,code:$("#code").value};
+  store.set("km-user",u);closeSheet();render(false);
+}
+function baseUrl(){return SITE_URL||(location.origin+location.pathname)}
+function openQR(id,title){
+  const url=baseUrl()+(id?"#/card/"+id:"");
+  openSheet(`<div id="qrPrint"><div class="qr-title">${esc(title)}</div>
+    <div class="qrbox" id="qrc"></div><div class="qr-url">${esc(url)}</div>
+    <div class="row2 noprint"><button class="btn ghost" onclick="closeSheet()">ปิด</button><button class="btn primary" onclick="window.print()">พิมพ์ QR</button></div></div>`);
+  try{new QRCode($("#qrc"),{text:url,width:440,height:440,correctLevel:QRCode.CorrectLevel.M})}
+  catch(e){$("#qrc").innerHTML='<p class="empty">สร้าง QR ไม่ได้ ตรวจสอบการเชื่อมต่ออินเทอร์เน็ต</p>'}
+}
+
+/* ---------- router ---------- */
+function render(scrollTop){
+  const [p,arg]=location.hash.replace(/^#\/?/,"").split("/");
+  let html,tab="home";
+  if(p==="card"){html=viewCard(decodeURIComponent(arg||""));tab=""}
+  else if(p==="quiz"){html=viewQuiz(decodeURIComponent(arg||""));tab=""}
+  else if(p==="search"){html=viewSearch();tab="search"}
+  else if(p==="me"){html=viewMe();tab="me"}
+  else html=viewHome();
+  $("#app").innerHTML=html;
+  document.querySelectorAll("nav.tabs a").forEach(a=>{if(a.dataset.tab===tab)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
+  const q=$("#q");
+  if(q){q.addEventListener("input",()=>{
+      if(p!=="search"){const v=q.value;location.hash="#/search";setTimeout(()=>{const n=$("#q");n.value=v;n.focus();$("#res").innerHTML=results(v)},0);return}
+      $("#res").innerHTML=results(q.value)});
+    if(p==="search")q.focus({preventScroll:true});}
+  if(scrollTop)window.scrollTo(0,0);
+}
+window.addEventListener("hashchange",()=>{if(!location.hash.startsWith("#/quiz"))QZ=null;render(true)});
+load().then(()=>{render(true);askUser(false)});
+</script>
+</body>
+</html>
