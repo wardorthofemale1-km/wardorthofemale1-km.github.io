@@ -677,11 +677,41 @@ function saveUser(){
 function baseUrl(){return SITE_URL||(location.origin+location.pathname)}
 function openQR(id,title){
   const url=baseUrl()+(id?"#/card/"+id:"");
-  openSheet(`<div id="qrPrint"><div class="qr-title">${esc(title)}</div>
+  const label=id?id+" "+((CARDS.find(c=>c.id===id)||{}).title||""):"คลังความรู้ ออร์โธหญิง 1";
+  openSheet(`<div class="qr-title">${esc(title)}</div>
     <div class="qrbox" id="qrc"></div><div class="qr-url">${esc(url)}</div>
-    <div class="row2 noprint"><button class="btn ghost" onclick="closeSheet()">ปิด</button><button class="btn primary" onclick="window.print()">พิมพ์ QR</button></div></div>`);
-  try{new QRCode($("#qrc"),{text:url,width:440,height:440,correctLevel:QRCode.CorrectLevel.M})}
-  catch(e){$("#qrc").innerHTML='<p class="empty">สร้าง QR ไม่ได้ ตรวจสอบการเชื่อมต่ออินเทอร์เน็ต</p>'}
+    <div class="row2"><button class="btn ghost" onclick="closeSheet()">ปิด</button><button class="btn primary" id="dlQR">ดาวน์โหลด QR</button></div>`);
+  try{new QRCode($("#qrc"),{text:url,width:600,height:600,correctLevel:QRCode.CorrectLevel.M})}
+  catch(e){$("#qrc").innerHTML='<p class="empty">สร้าง QR ไม่ได้ ตรวจสอบการเชื่อมต่ออินเทอร์เน็ต</p>';$("#dlQR").disabled=true;return}
+  $("#dlQR").onclick=()=>downloadQR(id,label);
+}
+function wrapText(ctx,text,maxW){
+  const out=[];let line="";
+  for(const ch of Array.from(text)){const t=line+ch;if(ctx.measureText(t).width>maxW&&line){out.push(line);line=ch}else line=t}
+  if(line)out.push(line);return out.slice(0,3);
+}
+async function downloadQR(id,label){
+  const src=$("#qrc canvas");if(!src)return;
+  try{await document.fonts.ready}catch(e){}
+  const W=1000,Q=760,pad=120,c=document.createElement("canvas"),x=c.getContext("2d");
+  x.font='600 44px Anuphan, "Sukhumvit Set", Thonburi, sans-serif';
+  const lines=wrapText(x,label,W-120);
+  c.width=W;c.height=pad+Q+60+lines.length*62+90;
+  x.fillStyle="#ffffff";x.fillRect(0,0,c.width,c.height);
+  x.fillStyle="#0E4D52";x.fillRect(0,0,W,24);
+  x.imageSmoothingEnabled=false;x.drawImage(src,(W-Q)/2,pad,Q,Q);
+  x.fillStyle="#1E2B2C";x.textAlign="center";x.font='600 44px Anuphan, "Sukhumvit Set", Thonburi, sans-serif';
+  lines.forEach((l,i)=>x.fillText(l,W/2,pad+Q+90+i*62));
+  x.fillStyle="#5E6B6B";x.font='400 28px "IBM Plex Sans Thai Looped", sans-serif';
+  x.fillText("สแกนเพื่อเปิดคลังความรู้ หอผู้ป่วยออร์โธปิดิกส์หญิง 1",W/2,c.height-50);
+  const name="QR-"+(id||"หน้าหลัก")+".png";
+  c.toBlob(b=>{
+    if(!b)return;
+    const u=URL.createObjectURL(b),a=document.createElement("a");
+    a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(u),4000);
+    toast("ดาวน์โหลด "+name+" แล้ว");
+  },"image/png");
 }
 
 /* ---------- router ---------- */
